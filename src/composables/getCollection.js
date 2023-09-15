@@ -9,16 +9,21 @@ const getCollection = (collection) => {
     // register die firestore collection reference
     let collectionRef = projectFirestore.collection(collection).orderBy('createdAt')
 
+    // wenn Änderung in der Database gibt, wird uns Snapshot davon züruck gegebn
     const unsub = collectionRef.onSnapshot((snap) => {
             let results = []
         snap.docs.forEach(doc => {
-            // muss warten bis der server Timestamp erstellt und sendet es zurück
-            doc.data().createdAt &&  results.push({...doc.data(), id: doc.id})
+            // Echtzeitig daten Zeigen
+            doc.data().createdAt && results.push({...doc.data(), id: doc.id})
+            // muss warten bis der server Timestamp erstellt dann die Data mit der ID in results speichern
+            // ohme die richte Seite wird von der snap data züruck in der Braoswr gezwigt ist schneller aber nicht Praxis
+            // mit der besden Seiten muss warten bis der server Timestamp erstellt dann an der Browser züruck senden
         })
 
-        // update Values
+        // update Documents Values
         documents.value = results
         error.value = null
+        
     }, (err) => {
         console.log(err.message)
         documents.value = null
