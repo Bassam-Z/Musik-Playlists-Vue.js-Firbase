@@ -9,6 +9,7 @@ const useStorage = () => {
     const url = ref(null)
     const filePath = ref(null)
 
+    //ermölicht bei der Playlist Erstellung Bild hochzuladen
     const uploadImage = async (file) => {
         filePath.value = `covers/${user.value.uid}/${file.name}`;
         const storageRef = projectStorage.ref(filePath.value);
@@ -21,7 +22,21 @@ const useStorage = () => {
             error.value = err.message
         }
     }
-    return { url, filePath, error, uploadImage }
+
+    //ermöglicht der User beim Playlist löschen auch dazugehörige Bild mit zu löschen
+    const deleteImage = async (path) => {
+        const storageRef = projectStorage.ref(path)
+
+        try {
+            await storageRef.delete(path)
+        } catch (err) {
+            console.log(err.message)
+            error.value = err.message
+        }
+    }
+
+
+    return { url, filePath, error, uploadImage, deleteImage }
     
 }
 

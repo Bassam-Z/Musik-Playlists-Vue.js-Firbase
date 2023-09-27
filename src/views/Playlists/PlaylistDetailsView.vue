@@ -10,6 +10,7 @@
       <h2>{{ playlist.title }}</h2>
       <p class="username">Created by {{ playlist.userName }}</p>
       <p class="description">{{ playlist.description }}</p>
+      <button v-if="ownership" @click="handelDelete">Delete Playlist</button>
     </div>
 
     <!-- song-list -->
@@ -22,14 +23,35 @@
 
 <script>
 import getDocument from '@/composables/getDocument';
+import getUser from '@/composables/getUser'
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import useDocument from '@/composables/useDocument'
+import useStorage from '@/composables/useStorage';
 
 export default {
     props: ['id'],
     setup(props) {
-      // document name gendärt zu playlist
+      // documents name gendärt zu playlist
       const { error, documents: playlist } = getDocument('playlisten', props.id)
+      const { user } = getUser()
+      const { err, isPanding, deleteDoc } = useDocument('playlisten', props.id)
+      const { deleteImage } = useStorage()
+      const router = useRouter()
 
-      return { error, playlist }
+      // Computed gnutzt um die Ownership Aktull zu bleiben beim login und logout und die user modify zu ermöglichen
+      const ownership = computed(() => {
+        //wenn die drei Bedingungen erfüllt, wird true zurück gegeben ansonst false // uid ist schlüsellwort von Firebase
+        return playlist.value && user.value && user.value.uid == playlist.value.userId
+      })
+
+      const handelDelete = async () => {
+        await deleteDoc()
+        await deleteImage(playlist.value.filePath)
+        router.push({name: 'Home'})
+      }
+
+      return { error, playlist, ownership, handelDelete }
     }
 
 }
@@ -56,8 +78,8 @@ export default {
   left: 0;
   min-width: 100%;
   min-height: 100%;
-  max-width: 200%;
-  max-height: 200%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .playlist-info {
