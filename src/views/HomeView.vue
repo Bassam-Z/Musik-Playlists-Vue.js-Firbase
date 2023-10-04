@@ -3,6 +3,7 @@
     <div v-if="error" class="error">Could not fetch the data</div>
     <div v-if="documents" class="document">
       <!-- <div v-for="doc in documents" :key="doc.id">  {{ doc.title }}</div> -->
+      <div class="no-Playlistes" v-if="!documents.length">Is no Playlists to display</div>
       <ListView :playlisten="documents"/>
     </div>
     <!-- <p>HomeView</p> -->
@@ -24,3 +25,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.no-Playlistes {
+  text-align: center;
+}
+</style>
