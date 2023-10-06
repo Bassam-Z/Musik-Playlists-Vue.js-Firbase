@@ -29,7 +29,7 @@ export default {
                 id: Math.floor(Math.random() * 1000000)
             }
             await updateDoc ({
-                //Es wird alle Elemnte in diese Arry gezeigt und die neu Son zu gefügt
+                //Es wird alle Elemnte in diese Arry gezeigt und die neu Song zu gefügt
                 songs: [...props.playlist.songs, newSong]
             })
             title.value = ''

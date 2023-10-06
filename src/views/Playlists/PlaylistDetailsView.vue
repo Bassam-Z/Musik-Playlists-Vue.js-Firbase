@@ -21,7 +21,7 @@
           <h1>{{ song.title }}</h1>
           <p>{{ song.artist }}</p>
         </div>
-        <button v-if="ownership">delete</button>
+        <button v-if="ownership" @click="handelDeleteSong(song.id)">delete</button>
       </div>
       <AddSong v-if="ownership" :playlist="playlist"/>
     </div>
@@ -45,7 +45,7 @@ export default {
       // documents name gendärt zu playlist
       const { error, documents: playlist } = getDocument('playlisten', props.id)
       const { user } = getUser()
-      const { err, isPanding, deleteDoc } = useDocument('playlisten', props.id)
+      const { err, isPanding, deleteDoc, updateDoc } = useDocument('playlisten', props.id)
       const { deleteImage } = useStorage()
       const router = useRouter()
 
@@ -61,7 +61,13 @@ export default {
         router.push({name: 'Home'})
       }
 
-      return { error, playlist, ownership, handelDelete }
+      const handelDeleteSong = async (id) => {
+        // wenn die Ids enlich sind, gibt true zurück d.h das song wird nicht gelöscht, an sonst gibt false züruck und löscht das Song
+        const songs = playlist.value.songs.filter((song) => song.id != id)
+        await updateDoc({songs})
+      }
+
+      return { error, playlist, ownership, handelDelete, handelDeleteSong }
     }
 
 }
