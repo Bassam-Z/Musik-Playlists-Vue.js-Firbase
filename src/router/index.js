@@ -4,6 +4,7 @@ import LoginView from '../views/auth/LoginView.vue'
 import SignupView from '@/views/auth/SignupView'
 import CreatePlaylistView from '@/views/Playlists/CreatePlaylistView'
 import PlaylistDetailsView from '@/views/Playlists/PlaylistDetailsView'
+import UserPlaylistView from '@/views/Playlists/UserPlaylistView'
 
 //auth guard
 import { projectAuth } from '@/firebase/Config'
@@ -32,6 +33,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: HomeView,
+    //nur um die Leute die angemeldet oder verifiziert zu geroutet werden können 
     beforeEnter: requireAuth
   },
   {
@@ -57,7 +59,13 @@ const routes = [
     component: PlaylistDetailsView,
     beforeEnter: requireAuth,
     props: true
-  }
+  },
+  {
+    path: '/playlistes/user',
+    name: 'UserPlaylist',
+    component: UserPlaylistView,
+    beforeEnter: requireAuth
+    }
 ]
 
 const router = createRouter({
