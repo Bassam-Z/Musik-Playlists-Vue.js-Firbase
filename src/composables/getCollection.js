@@ -1,13 +1,17 @@
 import { ref, watchEffect } from "vue"
 import { projectFirestore } from "../firebase/Config.js";
 
-const getCollection = (collection) => {
+const getCollection = (collection, query) => {
 
     const documents = ref (null)
     const error = ref (null)
 
     // register die firestore collection reference
-    let collectionRef = projectFirestore.collection(collection).orderBy('createdAt')
+    let collectionRef = projectFirestore.collection(collection).orderBy('createdAt') 
+
+    if (query){
+        collectionRef = collectionRef.where(...query)
+    }
 
     // wenn Änderung in der Database gibt, wird uns Snapshot davon züruck gegebn
     const unsub = collectionRef.onSnapshot((snap) => {
