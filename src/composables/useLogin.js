@@ -10,7 +10,10 @@ const login = async ( email, password ) => {
     error.value = null
     isPending.value = true
 
-    try {
+    if (!email || !password) {
+        error.value = 'Bitte geben Sie eine gültige E-Mail und ein Passwort ein';
+        isPending.value = false;
+        } else  try {
         const res = await projectAuth.signInWithEmailAndPassword(email, password)
         error.value = null
         isPending.value = false
@@ -18,7 +21,7 @@ const login = async ( email, password ) => {
         return res
     } 
     catch (err) {
-        console.log(err.message)
+        console.log(err.message, "sd")
         error.value = 'Incorrect login credentials'
         isPending.value = false
     }

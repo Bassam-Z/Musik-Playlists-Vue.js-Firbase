@@ -30,6 +30,8 @@ export default {
             if(!error.value){
                 console.log ('user logged in')
                 router.push({name: 'UserPlaylist'})
+            }else {
+              console.log ('user not logged in')
             }
         }
 

@@ -7,8 +7,10 @@ const isPending = ref (false)
 const signup = async ( displayName, email, password) => {
     error.value = null;
     isPending.value = true
-
-    try {
+    if (!email || !password) {
+        error.value = 'Bitte geben Sie eine Name, gültige E-Mail und ein Passwort ein';
+        isPending.value = false;
+        } else try {
         const res = await projectAuth.createUserWithEmailAndPassword(email, password)
         isPending.value = false
         if(!res){
